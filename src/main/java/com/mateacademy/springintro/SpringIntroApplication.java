@@ -2,21 +2,24 @@ package com.mateacademy.springintro;
 
 import com.mateacademy.springintro.model.User;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 
 @SpringBootApplication
+@Configuration
+@ComponentScan(basePackages = {"com.mateacademy.springintro.model", "com.mateacademy.springintro.bpp"})
 public class SpringIntroApplication {
 
-	public static void main(String[] args) {
-		FileSystemXmlApplicationContext context = new FileSystemXmlApplicationContext("classpath:context.xml");
-		User user = (User) context.getBean("user");
-		User userPrototype = (User) context.getBean("user");
+    public static void main(String[] args) {
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext("com.mateacademy.springintro");
 
-		User singleton = (User) context.getBean("singleton");
-		User other = (User) context.getBean("singleton");
+        User user = (User) context.getBean("prototype");
+        User userPrototype = (User) context.getBean("prototype");
 
-		System.out.println(singleton.equals(other));
-		context.registerShutdownHook();
-	}
+        User singleton = (User) context.getBean("singleton");
+        User other = (User) context.getBean("singleton");
 
+        Runtime.getRuntime().addShutdownHook(new Thread(context::close));
+    }
 }
