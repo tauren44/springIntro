@@ -14,11 +14,11 @@ public class SpringIntroApplication {
     public static void main(String[] args) {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext("com.mateacademy.springintro");
 
-        User user = (User) context.getBean("prototype");
-        User userPrototype = (User) context.getBean("prototype");
+        User user = context.getBean("prototype", User.class);
+        User userPrototype = context.getBean("prototype", User.class);
 
-        User singleton = (User) context.getBean("singleton");
-        User other = (User) context.getBean("singleton");
+        User singleton = context.getBean("singleton", User.class);
+        User other = context.getBean("singleton", User.class);
 
         Runtime.getRuntime().addShutdownHook(new Thread(context::close));
     }
